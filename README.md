@@ -141,6 +141,7 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `iframe_duration`: Invincibility frame duration (default: 0.15 seconds)
 - `enabled`: Whether dash is unlocked (default: true)
 - `lock_direction`: Prevents direction change during dash (default: true)
+- `dash_control`: Control influence during unlocked dash (default: 0.8)
 
 ## Technical Details
 

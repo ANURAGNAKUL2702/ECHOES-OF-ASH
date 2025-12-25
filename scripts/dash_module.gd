@@ -59,6 +59,10 @@ signal dash_ready()
 ## Direction lock during dash (if true, player can't change direction mid-dash)
 @export var lock_direction: bool = true
 
+## Control influence during dash when direction is not locked (0.0 to 1.0)
+## Higher values allow more player control, lower values maintain dash momentum
+@export_range(0.0, 1.0) var dash_control: float = 0.8
+
 # ============================================================================
 # INTERNAL STATE
 # ============================================================================
@@ -105,7 +109,7 @@ func dash(player: CharacterBody2D, direction: float = 0.0) -> bool:
 	## 
 	## Parameters:
 	##   player: The CharacterBody2D node to apply the dash to
-	##   direction: The dash direction (-1 left, 1 right, 0 auto-detect from player velocity)
+	##   direction: The dash direction (-1 left, 1 right, 0 auto-detect from horizontal velocity)
 	##
 	## Returns:
 	##   true if dash was executed, false if dash is on cooldown or disabled
@@ -276,7 +280,7 @@ func _update_dash_movement(delta: float) -> void:
 	else:
 		# Allow some control but prioritize dash
 		var dash_velocity: float = dash_speed * _dash_direction
-		_dashing_player.velocity.x = lerp(_dashing_player.velocity.x, dash_velocity, 0.8)
+		_dashing_player.velocity.x = lerp(_dashing_player.velocity.x, dash_velocity, dash_control)
 
 # ============================================================================
 # HELPER METHODS

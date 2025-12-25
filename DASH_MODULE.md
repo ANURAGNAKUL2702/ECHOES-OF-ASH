@@ -134,6 +134,7 @@ func _process(_delta):
 | `iframe_duration` | float | 0.15 | Duration of invincibility frames (seconds) |
 | `enabled` | bool | true | Whether dash ability is unlocked/enabled |
 | `lock_direction` | bool | true | If true, locks direction during dash |
+| `dash_control` | float | 0.8 | Control influence during dash when not locked (0.0-1.0) |
 
 ### Methods
 
@@ -142,7 +143,7 @@ Execute a dash for the given player.
 
 **Parameters:**
 - `player`: The CharacterBody2D to apply dash to
-- `direction`: Dash direction (-1 left, 1 right, 0 auto-detect)
+- `direction`: Dash direction (-1 left, 1 right, 0 auto-detect from horizontal velocity)
 
 **Returns:**
 - `true` if dash was executed, `false` if on cooldown or disabled

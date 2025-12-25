@@ -4,11 +4,16 @@ extends Node
 ## This script demonstrates how to integrate the DashModule with a player controller.
 ## It shows proper usage of the dash API and separation of concerns.
 ##
+## Prerequisites:
+## - "dash" input action must be defined in Project Settings -> Input Map
+## - "move_left" and "move_right" input actions (typically already defined for player movement)
+##
 ## Usage:
 ## 1. Add this script to your player scene
 ## 2. Add a DashModule node as a child
 ## 3. Assign the DashModule node to the @export variable in the inspector
-## 4. The script will handle dash input and call the module's dash() method
+## 4. Configure input actions in Project Settings if not already present
+## 5. The script will handle dash input and call the module's dash() method
 
 class_name DashIntegrationExample
 
