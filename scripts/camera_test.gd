@@ -81,12 +81,15 @@ func _process(delta: float) -> void:
 		camera.reset_zoom()
 	
 	# Toggle smooth follow with F
-	if Input.is_key_pressed(KEY_F) and Input.is_action_just_pressed("ui_accept"):
+	if Input.is_physical_key_pressed(KEY_F) and not Input.is_physical_key_pressed(KEY_F):
+		pass  # This was creating an issue, using direct key check below instead
+	
+	if Input.is_key_label_just_pressed(KEY_F):
 		camera.smooth_follow = not camera.smooth_follow
 		print("Smooth follow: ", camera.smooth_follow)
 	
 	# Toggle dead zone with G
-	if Input.is_key_pressed(KEY_G):
+	if Input.is_key_label_just_pressed(KEY_G):
 		camera.enable_dead_zone = not camera.enable_dead_zone
 		print("Dead zone: ", camera.enable_dead_zone)
 

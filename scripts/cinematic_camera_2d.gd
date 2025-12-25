@@ -249,8 +249,9 @@ func _update_shake(delta: float) -> void:
 	
 	# Generate shake offset using sine wave for smooth oscillation
 	var shake_amount = _current_shake_intensity
-	_shake_offset.x = sin(Time.get_ticks_msec() * 0.001 * shake_frequency) * shake_amount
-	_shake_offset.y = cos(Time.get_ticks_msec() * 0.001 * shake_frequency * 0.7) * shake_amount
+	var time_seconds = Time.get_ticks_msec() * 0.001
+	_shake_offset.x = sin(time_seconds * shake_frequency) * shake_amount
+	_shake_offset.y = cos(time_seconds * shake_frequency * 0.7) * shake_amount
 	
 	# Check if shake has ended
 	if _shake_time_remaining <= 0.0:
