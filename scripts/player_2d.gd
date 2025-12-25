@@ -289,26 +289,35 @@ func set_state(new_state: State) -> void:
 
 func update_state(dt: float) -> void:
 	## General update logic for states
-	## This method can be extended to handle state-specific update logic
+	## This method is designed as an extension point for state-specific update logic
 	## that runs every frame regardless of physics calculations
 	##
 	## Parameters:
 	##   dt: Delta time in seconds
 	##
-	## Note: Currently acts as a placeholder for future state-specific
-	## logic such as animation updates, timers, or state-dependent behavior
+	## Design Note: This method intentionally contains placeholder logic (pass statements)
+	## as required by the FSM specification. It serves as a clean extension point where
+	## developers can add state-specific behavior such as:
+	## - Animation updates
+	## - State-specific timers
+	## - Visual effects
+	## - Sound effects
+	## - UI updates
+	##
+	## The empty implementation allows the FSM to be complete and ready for extension
+	## without requiring immediate state-specific logic.
 	
 	# State-specific update logic can be added here
 	# For now, this serves as an extension point for future enhancements
 	match current_state:
 		State.IDLE:
-			pass  # Future: Handle idle-specific updates
+			pass  # Future: Handle idle-specific updates (e.g., idle animations)
 		State.RUN:
-			pass  # Future: Handle run-specific updates
+			pass  # Future: Handle run-specific updates (e.g., footstep sounds)
 		State.JUMP:
-			pass  # Future: Handle jump-specific updates
+			pass  # Future: Handle jump-specific updates (e.g., jump particles)
 		State.FALL:
-			pass  # Future: Handle fall-specific updates
+			pass  # Future: Handle fall-specific updates (e.g., wind effects)
 
 
 func physics_update_state() -> void:
@@ -330,7 +339,9 @@ func physics_update_state() -> void:
 	if not is_on_floor():
 		# Player is in the air
 		if velocity.y <= 0:
-			# Moving upward or at peak of jump
+			# Moving upward or at the peak of jump (velocity.y == 0)
+			# Note: Peak is treated as JUMP to avoid rapid state switching
+			# Once velocity becomes positive, it will smoothly transition to FALL
 			new_state = State.JUMP
 		else:
 			# Moving downward - falling
