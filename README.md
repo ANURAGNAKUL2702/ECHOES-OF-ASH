@@ -4,6 +4,44 @@ A Godot 4 game project featuring a production-quality 2D player movement control
 
 ## Features
 
+### Enemy AI System
+
+The game includes a complete modular enemy AI system with a finite state machine for intelligent enemy behavior:
+
+#### 1. State Machine with 6 States
+- **PATROL**: Enemy patrols an area or stays idle with configurable movement patterns
+- **DETECT**: Enemy spots target and observes briefly before acting
+- **CHASE**: Enemy actively pursues the detected target
+- **ATTACK**: Enemy is in range and attacks via signal-based interface
+- **STUNNED**: Enemy is temporarily disabled with configurable duration
+- **DEATH**: Enemy has been defeated (permanent state)
+
+#### 2. Line of Sight Detection
+- **RayCast2D Integration**: Realistic vision that can be blocked by obstacles
+- **Detection Range**: Tunable parameter for how far enemies can see (default: 400 pixels)
+- **Detection Angle**: Configurable field of view (default: 180 degrees, supports up to 360)
+- **Target Groups**: Uses Godot groups instead of hard-coded player references
+
+#### 3. Modular Design
+- **No Hard Dependencies**: Uses signals and groups for clean separation
+- **Combat Separation**: Attack logic handled externally via `attack_ready` signal
+- **Reusable**: Easy to create different enemy types by extending or configuring
+- **Signal-Based**: Emits events for detection, attacks, stun, and death
+
+#### 4. Tunable Parameters
+All parameters exposed via @export for easy customization:
+- Movement speeds (patrol and chase)
+- Detection range and angle
+- Attack range and cooldown
+- Patrol distance and wait times
+- Stun duration and immunity
+
+#### 5. Code Quality
+- Clean, modular design following same patterns as player FSM
+- Comprehensive documentation with usage examples
+- Type-safe implementation with proper type hints
+- Example integration scripts and test scenes provided
+
 ### Finite State Machine (FSM)
 
 The player controller now includes a clean, production-ready finite state machine with the following features:
@@ -104,10 +142,20 @@ ECHOES-OF-ASH/
 ├── scripts/
 │   ├── player_2d.gd                    # Main player controller script
 │   ├── dash_module.gd                  # Standalone dash module
-│   └── dash_integration_example.gd     # Example dash integration
+│   ├── dash_integration_example.gd     # Example dash integration
+│   ├── enemy_ai.gd                     # Modular enemy AI controller
+│   ├── enemy_integration_example.gd    # Example enemy integration
+│   └── enemy_ai_test.gd                # Enemy AI test scene script
 ├── scenes/
 │   ├── player.tscn                     # Player scene
+│   ├── enemy.tscn                      # Example enemy scene
+│   ├── enemy_ai_test.tscn              # Enemy AI test scene
 │   └── main.tscn                       # Main game scene with platforms
+├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md  # Complete enemy AI documentation
+├── ENEMY_AI_QUICK_REFERENCE.md         # Quick setup guide for enemy AI
+├── TEST_ENEMY_AI.md                    # Enemy AI testing procedures
+├── FSM_IMPLEMENTATION_SUMMARY.md       # Player FSM documentation
+├── DASH_MODULE.md                      # Dash module documentation
 ├── icon.svg                            # Project icon
 ├── project.godot                       # Godot project configuration
 └── README.md                           # This file
@@ -177,6 +225,20 @@ To integrate the dash module into your game:
 6. **Query State**: Use `is_dashing()` and `is_invincible()` for gameplay logic
 
 Example integration code is provided in `scripts/dash_integration_example.gd`.
+
+### Using the Enemy AI
+
+To integrate enemy AI into your game:
+
+1. **Add Enemy to Scene**: Instance `enemy.tscn` or attach `enemy_ai.gd` to a CharacterBody2D
+2. **Add RayCast2D**: Add a RayCast2D child for line of sight detection
+3. **Configure Target**: Ensure player/target is in the "player" group
+4. **Configure Parameters**: Adjust detection range, speeds, patrol settings in the inspector
+5. **Connect Signals**: Connect to `attack_ready`, `died`, etc. for combat integration
+6. **Test**: Use `enemy_ai_test.tscn` to see the AI in action
+
+Quick setup guide is provided in `ENEMY_AI_QUICK_REFERENCE.md`.
+Complete documentation is in `ENEMY_AI_IMPLEMENTATION_SUMMARY.md`.
 
 ### Godot 4 Compatibility
 
