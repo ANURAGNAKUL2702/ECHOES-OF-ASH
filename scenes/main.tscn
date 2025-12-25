@@ -1,11 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgnf20lw8b7k0"]
+[gd_scene load_steps=6 format=3 uid="uid://bgnf20lw8b7k0"]
 
 [ext_resource type="PackedScene" uid="uid://bdqhx8ksm0m8u" path="res://scenes/player.tscn" id="1_k0a6g"]
+[ext_resource type="Script" path="res://scripts/lighting_system.gd" id="2_lighting"]
+[ext_resource type="Script" path="res://scripts/particle_manager.gd" id="3_particle"]
+[ext_resource type="Script" path="res://scripts/atmospheric_integration.gd" id="4_integration"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mqc3h"]
 size = Vector2(400, 40)
 
 [node name="Main" type="Node2D"]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.15, 0.15, 0.2, 1)
+
+[node name="LightingSystem" type="Node2D" parent="."]
+script = ExtResource("2_lighting")
+enable_player_light = true
+player_light_energy = 1.2
+player_light_scale = Vector2(2, 2)
+enable_flickering_lights = true
+flicker_intensity = 0.4
+flicker_speed = 3.0
+enable_fog = true
+fog_layer_count = 2
+fog_color = Color(0.15, 0.15, 0.2, 0.3)
+
+[node name="ParticleManager" type="Node2D" parent="."]
+script = ExtResource("3_particle")
+enable_dash_trails = true
+dash_trail_color = Color(0.5, 0.8, 1, 0.8)
+dash_trail_amount = 5
+enable_impacts = true
+impact_particle_count = 20
+enable_dust = true
+dust_particle_count = 12
+
+[node name="AtmosphericIntegration" type="Node" parent="."]
+script = ExtResource("4_integration")
+auto_dust_on_landing = true
+landing_velocity_threshold = 200.0
 
 [node name="Player" parent="." instance=ExtResource("1_k0a6g")]
 position = Vector2(200, 400)
@@ -100,7 +133,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 18
-text = "Player Movement Demo
+text = "Atmospheric Game Demo
 
 Controls:
 - Move: A/D or Arrow Keys (Left/Right)
@@ -110,4 +143,7 @@ Features:
 - Smooth acceleration and deceleration
 - Coyote time (jump shortly after leaving edge)
 - Jump buffering (press jump before landing)
-- Variable jump height (hold for higher jumps)"
+- Variable jump height (hold for higher jumps)
+- Player-following light with atmospheric fog
+- Automatic landing dust particles
+- Flickering environmental lights"
