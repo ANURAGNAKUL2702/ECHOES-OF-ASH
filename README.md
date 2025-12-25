@@ -1,6 +1,6 @@
 # ECHOES OF ASH
 
-A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, melee combat, a cinematic camera controller, atmospheric lighting, and a modular particle system.
+A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, a cinematic camera controller, atmospheric lighting, and a modular particle system.
 
 ## Features
 
