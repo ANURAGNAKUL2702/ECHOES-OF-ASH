@@ -129,11 +129,18 @@ func _find_node_of_type(node: Node, type_name: String) -> Node:
 	if node == null:
 		return null
 	
-	# Check current node
+	# Check current node by comparing script class name
 	if node.get_script():
 		var script: Script = node.get_script()
-		if script.get_global_name() == type_name:
+		# Check global name if available (for class_name declarations)
+		var global_name: String = script.get_global_name()
+		if global_name != "" and global_name == type_name:
 			return node
+		# Fallback: check script path filename (for scripts without class_name)
+		if script.resource_path != "":
+			var script_name: String = script.resource_path.get_file().get_basename()
+			if script_name == type_name.to_snake_case():
+				return node
 	
 	# Check children recursively
 	for child in node.get_children():

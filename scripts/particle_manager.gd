@@ -342,7 +342,9 @@ func _spawn_particle_effect(effect_type: String, pos: Vector2, direction: Vector
 		var angle: float = direction.angle()
 		initial_vel = initial_vel.rotated(angle)
 	
-	material.direction = Vector3(initial_vel.x, initial_vel.y, 0)
+	# Normalize direction for material (expects unit vector)
+	var normalized_direction: Vector3 = Vector3(initial_vel.x, initial_vel.y, 0).normalized()
+	material.direction = normalized_direction
 	material.initial_velocity_min = initial_vel.length() * 0.8
 	material.initial_velocity_max = initial_vel.length() * 1.2
 	
@@ -375,10 +377,8 @@ func _spawn_particle_effect(effect_type: String, pos: Vector2, direction: Vector
 	# Start emission
 	particles.emitting = true
 	
-	# Schedule cleanup
-	var cleanup_timer: float = config["lifetime"] + 0.5
-	await get_tree().create_timer(cleanup_timer).timeout
-	_remove_particle_system(particles)
+	# Connect finished signal for cleanup
+	particles.finished.connect(_on_particle_finished.bind(particles))
 
 
 func _create_fade_gradient() -> Gradient:
@@ -437,6 +437,15 @@ func _remove_particle_system(particles: GPUParticles2D) -> void:
 	
 	if is_instance_valid(particles):
 		particles.queue_free()
+
+
+func _on_particle_finished(particles: GPUParticles2D) -> void:
+	## Called when a particle system finishes emission
+	##
+	## Parameters:
+	##   particles: The GPUParticles2D that finished
+	
+	_remove_particle_system(particles)
 
 
 func _cleanup_oldest_particle() -> void:

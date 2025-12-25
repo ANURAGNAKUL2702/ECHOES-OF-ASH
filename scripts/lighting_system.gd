@@ -90,6 +90,9 @@ signal lighting_initialized()
 ## Base color of the fog
 @export var fog_color: Color = Color(0.15, 0.15, 0.2, 0.3)  # Dark atmospheric fog
 
+## Alpha variation factor for fog depth (0.0-1.0, higher = more variation between layers)
+@export_range(0.0, 1.0) var fog_depth_variation: float = 0.5
+
 ## Z-index for fog rendering (negative to render behind gameplay)
 @export var fog_z_index: int = -5
 
@@ -171,8 +174,9 @@ func _setup_fog_layers() -> void:
 		fog_layer.name = "FogLayer" + str(i)
 		fog_layer.color = fog_color
 		
-		# Make fog layers semi-transparent and vary by layer
-		var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * 0.5)
+		# Make fog layers semi-transparent and vary by layer for depth effect
+		# Each layer becomes progressively more transparent using the depth variation factor
+		var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * fog_depth_variation)
 		fog_layer.color.a = fog_color.a * alpha_variation
 		
 		# Set size to cover viewport (will be adjusted in viewport)
@@ -330,11 +334,11 @@ func set_fog_color(color: Color) -> void:
 	
 	fog_color = color
 	
-	# Update existing fog layers
+	# Update existing fog layers with depth variation
 	for i in range(_fog_container.get_child_count()):
 		var fog_layer: ColorRect = _fog_container.get_child(i) as ColorRect
 		if fog_layer:
-			var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * 0.5)
+			var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * fog_depth_variation)
 			fog_layer.color = color
 			fog_layer.color.a = color.a * alpha_variation
 
