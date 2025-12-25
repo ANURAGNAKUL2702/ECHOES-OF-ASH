@@ -317,9 +317,6 @@ ECHOES-OF-ASH/
 ├── TEST_ENEMY_AI.md                         # Enemy AI testing procedures
 ├── FSM_IMPLEMENTATION_SUMMARY.md            # Player FSM documentation
 ├── DASH_MODULE.md                           # Dash module documentation
-├── DASH_QUICK_REFERENCE.md                  # Quick setup guide for dash
-├── TEST_DASH_MODULE.md                      # Dash testing procedures
-├── DASH_IMPLEMENTATION_SUMMARY.md           # Complete dash summary
 ├── MELEE_COMBAT_SYSTEM.md                   # Combat system documentation
 ├── COMBAT_QUICK_REFERENCE.md                # Quick setup guide for combat
 ├── TEST_COMBAT_SYSTEM.md                    # Combat testing procedures
