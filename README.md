@@ -1,6 +1,6 @@
 # ECHOES OF ASH
 
-A Godot 4 game project featuring production-quality 2D player movement, dash mechanics, and melee combat systems.
+A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, melee combat, cinematic camera controller, atmospheric lighting, and a modular particle system.
 
 ## Features
 
@@ -97,6 +97,117 @@ The game includes a modular melee combat controller (`MeleeCombatController`) fo
 
 For detailed documentation, see [MELEE_COMBAT_SYSTEM.md](MELEE_COMBAT_SYSTEM.md).
 
+### Atmospheric Lighting System
+
+The game includes a comprehensive atmospheric lighting system (`LightingSystem`) for creating immersive 2D environments:
+
+#### 1. Player-Following Light
+- **Smooth Follow**: Configurable smoothing for natural light movement
+- **Customizable Properties**: Adjust energy, color, scale, and offset
+- **Runtime Control**: Enable/disable and modify properties during gameplay
+- **Performance Optimized**: Minimal overhead with efficient updates
+
+#### 2. Flickering Environmental Lights
+- **Natural Animation**: Sine wave-based flickering with unique phases
+- **Easy Placement**: Add lights at any position with custom colors
+- **Dynamic Management**: Add/remove lights at runtime
+- **Atmospheric Variation**: Each light has random frequency for natural feel
+
+#### 3. Fog Layers
+- **Multi-Layer Depth**: Configurable layer count for atmospheric depth
+- **Color Customization**: Adjust fog color and transparency
+- **Automatic Variation**: Layers have graduated alpha for depth effect
+- **Toggle Support**: Enable/disable fog based on game state
+
+#### 4. Performance-Safe Defaults
+- Optimized for various hardware configurations
+- Minimal per-frame calculations
+- Efficient light and fog management
+- Frame-rate independent animations
+
+### Particle Manager
+
+The game includes a modular particle effect system (`ParticleManager`) for dynamic visual feedback:
+
+#### 1. Dash Trail Particles
+- **Automatic Emission**: Follows player during dash action
+- **Configurable Properties**: Adjust color, lifetime, and particle count
+- **Signal Integration**: Works seamlessly with DashModule
+- **Smooth Trails**: Timed emission for consistent trail effect
+
+#### 2. Impact Particles
+- **Directional Spread**: Particles respect impact direction
+- **Combat Ready**: Perfect for hit effects and collisions
+- **Gravity Support**: Realistic particle physics
+- **Configurable Velocity**: Adjust speed and spread angle
+
+#### 3. Dust Particles
+- **Landing Effects**: Automatic dust on player landing
+- **Velocity Influenced**: Dust direction follows player movement
+- **Ground Interaction**: Perfect for platformer feel
+- **Adjustable Intensity**: Configure particle count and lifetime
+
+#### 4. Ambient Particles
+- **Continuous Atmosphere**: Optional always-on particle effects
+- **Customizable Patterns**: Adjust density, speed, and color
+- **Performance Friendly**: Efficient spawning and management
+
+### Enemy AI System
+
+The game includes a modular, FSM-based enemy AI system with multiple behavior patterns:
+
+#### 1. Patrol Behavior
+- **Waypoint System**: Define patrol paths with multiple waypoints
+- **Smooth Movement**: Uses move_and_slide() for proper physics
+- **Flexible Patterns**: Loop or ping-pong between waypoints
+- **Configurable Speed**: Adjust patrol speed per enemy
+
+#### 2. Chase Behavior
+- **Player Detection**: Automatic player tracking within range
+- **Smooth Pursuit**: Natural movement toward player
+- **Attack Range**: Stop at configurable distance
+- **Dynamic Switching**: Seamlessly transitions between behaviors
+
+#### 3. Attack Behavior
+- **Cooldown System**: Prevents attack spam
+- **Animation Ready**: Designed for easy animation integration
+- **Damage Dealing**: Configurable damage values
+- **Recovery State**: Returns to appropriate behavior after attack
+
+#### 4. Finite State Machine
+- **Clean Architecture**: State enum with clear transitions
+- **Debug Support**: Exposed state variables for debugging
+- **Extensible**: Easy to add new states and behaviors
+- **Type-Safe**: Uses Godot 4 enums for compile-time safety
+
+### Cinematic Camera Controller
+
+The game includes a feature-rich 2D camera controller (`CinematicCameraController`) with smooth following, camera shake, zoom effects, and dead-zone control:
+
+#### 1. Smooth Camera Follow
+- **Configurable Smoothing**: Adjust follow speed (0.0 = instant, 1.0 = very smooth)
+- **Target Tracking**: Follows any Node2D (player, enemies, objects)
+- **Dead-Zone Support**: Optional movement threshold before camera reacts
+- **Offset Control**: Adjust camera position relative to target
+
+#### 2. Camera Shake
+- **Trauma-Based System**: Realistic shake with decay over time
+- **Configurable Intensity**: Adjust shake strength and duration
+- **Multiple Shake Profiles**: Different shake patterns for various events
+- **No Permanent Drift**: Camera returns to stable position after shake
+
+#### 3. Zoom Effects
+- **Smooth Zoom Transitions**: Interpolated zoom changes
+- **Multiple Zoom Levels**: Predefined or custom zoom values
+- **Runtime Control**: Change zoom based on gameplay events
+- **Limit Support**: Configurable min/max zoom boundaries
+
+#### 4. Dead-Zone System
+- **Movement Threshold**: Camera doesn't move until player leaves zone
+- **Customizable Size**: Adjust dead-zone dimensions
+- **Smooth Transitions**: Natural camera movement at zone edges
+- **Toggle Support**: Enable/disable dead-zone at runtime
+
 ### Player Movement Controller
 
 The game includes a robust 2D player movement controller (`Player2D`) with the following features:
@@ -141,20 +252,53 @@ The game includes a robust 2D player movement controller (`Player2D`) with the f
 ```
 ECHOES-OF-ASH/
 ├── scripts/
-│   ├── player_2d.gd                      # Main player controller script
-│   ├── dash_module.gd                    # Standalone dash module
-│   ├── dash_integration_example.gd       # Example dash integration
-│   ├── melee_combat_controller.gd        # Melee combat system
-│   ├── hitbox.gd                         # Offensive collision detection
-│   ├── hurtbox.gd                        # Defensive collision detection
-│   └── combat_integration_example.gd     # Example combat integration
+│   ├── player_2d.gd                         # Main player controller script
+│   ├── dash_module.gd                       # Standalone dash module
+│   ├── dash_integration_example.gd          # Example dash integration
+│   ├── melee_combat_controller.gd           # Melee combat system
+│   ├── hitbox.gd                            # Offensive collision detection
+│   ├── hurtbox.gd                           # Defensive collision detection
+│   ├── combat_integration_example.gd        # Example combat integration
+│   ├── test_combat_system.gd                # Combat system tests
+│   ├── enemy_ai.gd                          # Modular enemy AI with FSM
+│   ├── enemy_ai_test.gd                     # Enemy AI test scene script
+│   ├── cinematic_camera_2d.gd               # Cinematic camera controller
+│   ├── camera_test.gd                       # Camera test scene script
+│   ├── lighting_system.gd                   # Atmospheric lighting system
+│   ├── lighting_test.gd                     # Lighting test scene script
+│   ├── particle_manager.gd                  # Modular particle manager
+│   ├── particle_test.gd                     # Particle test scene script
+│   └── atmospheric_integration.gd           # Lighting & particle integration
 ├── scenes/
-│   ├── player.tscn                       # Player scene
-│   └── main.tscn                         # Main game scene with platforms
-├── icon.svg                              # Project icon
-├── project.godot                         # Godot project configuration
-├── MELEE_COMBAT_SYSTEM.md                # Combat system documentation
-└── README.md                             # This file
+│   ├── player.tscn                          # Player scene
+│   ├── enemy.tscn                           # Example enemy scene
+│   ├── enemy_ai_test.tscn                   # Enemy AI test scene
+│   ├── camera_test.tscn                     # Camera test scene
+│   ├── lighting_test.tscn                   # Lighting system test scene
+│   ├── particle_test.tscn                   # Particle manager test scene
+│   └── main.tscn                            # Main game scene with platforms
+├── MELEE_COMBAT_SYSTEM.md                   # Combat system documentation
+├── COMBAT_QUICK_REFERENCE.md                # Quick setup guide for combat
+├── TEST_COMBAT_SYSTEM.md                    # Combat testing procedures
+├── COMBAT_IMPLEMENTATION_SUMMARY.md         # Complete combat summary
+├── PROJECT_HEALTH_REPORT.md                 # Project health analysis
+├── CAMERA_IMPLEMENTATION_SUMMARY.md         # Complete camera documentation
+├── CAMERA_QUICK_REFERENCE.md                # Quick setup guide for camera
+├── TEST_CAMERA.md                           # Camera testing procedures
+├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md       # Complete enemy AI documentation
+├── ENEMY_AI_QUICK_REFERENCE.md              # Quick setup guide for enemy AI
+├── TEST_ENEMY_AI.md                         # Enemy AI testing procedures
+├── FSM_IMPLEMENTATION_SUMMARY.md            # Player FSM documentation
+├── DASH_MODULE.md                           # Dash module documentation
+├── DASH_QUICK_REFERENCE.md                  # Quick setup guide for dash
+├── TEST_DASH_MODULE.md                      # Dash testing procedures
+├── DASH_IMPLEMENTATION_SUMMARY.md           # Complete dash summary
+├── LIGHTING_IMPLEMENTATION_SUMMARY.md       # Complete lighting documentation
+├── PARTICLE_MANAGER_IMPLEMENTATION_SUMMARY.md # Complete particle documentation
+├── ATMOSPHERIC_QUICK_REFERENCE.md           # Quick setup for lighting & particles
+├── icon.svg                                 # Project icon
+├── project.godot                            # Godot project configuration
+└── README.md                                # This file
 ```
 
 ## Customization
@@ -207,6 +351,44 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `weight`: Entity weight affecting knockback (default: 1.0)
 - `vulnerable`: Whether hurtbox can take damage (default: true)
 
+### Camera Parameters (CinematicCamera2D)
+- `damping_speed_x`: Horizontal follow smoothness (default: 5.0)
+- `damping_speed_y`: Vertical follow smoothness (default: 5.0)
+- `base_zoom`: Default camera zoom level (default: Vector2(1.5, 1.5))
+- `zoom_speed`: Zoom transition speed (default: 3.0)
+- `min_zoom`: Minimum zoom level (default: Vector2(0.5, 0.5))
+- `max_zoom`: Maximum zoom level (default: Vector2(3.0, 3.0))
+- `default_shake_intensity`: Default shake strength in pixels (default: 10.0)
+- `default_shake_duration`: Default shake duration in seconds (default: 0.3)
+- `shake_decay`: How quickly shake fades (default: 5.0)
+- `shake_frequency`: Shake oscillation speed (default: 15.0)
+- `dead_zone_width`: Dead-zone width in pixels (default: 100.0)
+- `dead_zone_height`: Dead-zone height in pixels (default: 80.0)
+
+### Enemy AI Parameters (EnemyAI)
+- `patrol_speed`: Speed when patrolling (default: 50.0)
+- `chase_speed`: Speed when chasing player (default: 100.0)
+- `detection_range`: Distance to detect player (default: 200.0)
+- `attack_range`: Distance to attack player (default: 50.0)
+- `attack_cooldown`: Time between attacks (default: 1.5)
+- `attack_damage`: Damage dealt (default: 10.0)
+- `patrol_wait_time`: Wait time at waypoints (default: 2.0)
+
+### Lighting Parameters (LightingSystem)
+- `player_light_energy`: Brightness of player light (default: 1.0)
+- `player_light_color`: Color of player light (default: white)
+- `light_follow_smoothness`: How smoothly light follows player (default: 5.0)
+- `fog_enabled`: Whether fog is active (default: true)
+- `fog_color`: Color of fog layers (default: semi-transparent blue)
+- `fog_layer_count`: Number of fog layers (default: 3)
+
+### Particle Parameters (ParticleManager)
+- `dash_trail_color`: Color of dash trail particles (default: cyan)
+- `dash_particle_lifetime`: How long dash particles last (default: 0.5)
+- `impact_particle_count`: Number of impact particles (default: 20)
+- `dust_particle_count`: Number of dust particles (default: 15)
+- `ambient_enabled`: Whether ambient particles are active (default: false)
+
 ## Technical Details
 
 ### Implementation Highlights
@@ -255,6 +437,64 @@ To integrate the combat system into your game:
 
 Example integration code is provided in `scripts/combat_integration_example.gd`.
 For complete documentation, see [MELEE_COMBAT_SYSTEM.md](MELEE_COMBAT_SYSTEM.md).
+
+### Using the Enemy AI
+
+To integrate enemy AI into your game:
+
+1. **Add Enemy to Scene**: Instance `enemy.tscn` or attach `enemy_ai.gd` to a CharacterBody2D
+2. **Add RayCast2D**: Add a RayCast2D child for line of sight detection
+3. **Configure Target**: Ensure player/target is in the "player" group
+4. **Configure Parameters**: Adjust detection range, speeds, patrol settings in the inspector
+5. **Connect Signals**: Connect to `attack_ready`, `died`, etc. for combat integration
+6. **Test**: Use `enemy_ai_test.tscn` to see the AI in action
+
+Quick setup guide is provided in `ENEMY_AI_QUICK_REFERENCE.md`.
+Complete documentation is in `ENEMY_AI_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Cinematic Camera
+
+To integrate the cinematic camera into your game:
+
+1. **Add Camera to Scene**: Add a Camera2D node to your player or scene
+2. **Attach Script**: Attach `cinematic_camera_2d.gd` to the Camera2D node
+3. **Enable Camera**: Check "Current" in the Inspector to enable the camera
+4. **Configure Parameters**: Adjust damping, zoom, shake, and dead-zone settings in the inspector
+5. **Trigger Effects**: Call `camera.shake()` for impacts, `camera.set_zoom()` for dramatic moments
+6. **Connect Signals**: Connect to `shake_started`, `zoom_changed` for visual/audio feedback
+7. **Test**: Use `camera_test.tscn` to test all camera features
+
+Quick setup guide is provided in `CAMERA_QUICK_REFERENCE.md`.
+Complete documentation is in `CAMERA_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Lighting System
+
+To integrate the lighting system into your game:
+
+1. **Add to Scene**: Add a Node2D to your scene and attach `lighting_system.gd`
+2. **Configure in Inspector**: Enable features and adjust colors, fog, and light properties
+3. **Setup Player Light**: Call `lighting_system.setup_player_light(player)` in your code
+4. **Add Environmental Lights**: Use `add_flickering_light(position, color)` to place torches/lamps
+5. **Darken Scene**: Add a CanvasModulate with dark color (e.g., Color(0.1, 0.1, 0.15)) for best effect
+6. **Adjust at Runtime**: Use methods like `set_player_light_energy()` and `set_fog_enabled()`
+7. **Test**: Use `lighting_test.tscn` to test all lighting features
+
+Quick setup guide is provided in `ATMOSPHERIC_QUICK_REFERENCE.md`.
+Complete documentation is in `LIGHTING_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Particle Manager
+
+To integrate the particle manager into your game:
+
+1. **Add to Scene**: Add a Node2D to your scene and attach `particle_manager.gd`
+2. **Integrate with Dash**: Connect dash signals to start/stop dash trail
+3. **Add Impact Effects**: Call `spawn_impact(position, direction)` on collision
+4. **Add Dust Effects**: Call `spawn_dust(position, velocity_x)` on landing
+5. **Configure Particles**: Adjust colors, lifetimes, counts in the inspector
+6. **Test**: Use `particle_test.tscn` to test all particle effects
+
+Quick setup guide is provided in `ATMOSPHERIC_QUICK_REFERENCE.md`.
+Complete documentation is in `PARTICLE_MANAGER_IMPLEMENTATION_SUMMARY.md`.
 
 ### Godot 4 Compatibility
 
