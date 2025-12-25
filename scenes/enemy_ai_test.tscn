@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7h8j9k0l1m2n3"]
+
+[ext_resource type="Script" path="res://scripts/enemy_ai_test.gd" id="1_test"]
+[ext_resource type="PackedScene" uid="uid://bdqhx8ksm0m8u" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://bqm4jy3qxjqxr" path="res://scenes/enemy.tscn" id="3_enemy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(2000, 100)
+
+[node name="EnemyAITest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(640, 300)
+
+[node name="Enemy" parent="." instance=ExtResource("3_enemy")]
+position = Vector2(200, 300)
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(640, 450)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="GroundSprite" type="ColorRect" parent="Ground"]
+offset_left = -1000.0
+offset_top = -50.0
+offset_right = 1000.0
+offset_bottom = 50.0
+color = Color(0.4, 0.3, 0.2, 1)
+
+[node name="Wall" type="StaticBody2D" parent="."]
+position = Vector2(400, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall"]
+position = Vector2(0, -75)
+shape = SubResource("RectangleShape2D_ground")
+scale = Vector2(0.1, 1.5)
+
+[node name="WallSprite" type="ColorRect" parent="Wall"]
+offset_left = -10.0
+offset_top = -150.0
+offset_right = 10.0
+offset_bottom = 0.0
+color = Color(0.3, 0.3, 0.3, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 300)
+zoom = Vector2(1.5, 1.5)
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="DebugUI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 300.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Enemy AI Test Scene
+State: PATROL
+Target: None"
+
+[node name="Instructions" type="Label" parent="DebugUI"]
+offset_left = 10.0
+offset_top = 550.0
+offset_right = 500.0
+offset_bottom = 650.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Controls:
+WASD / Arrow Keys - Move
+Space - Jump
+
+Enemy AI Demo:
+- Enemy patrols back and forth
+- Detects player in range with line of sight
+- Chases player when detected
+- Wall blocks line of sight"

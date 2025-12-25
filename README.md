@@ -286,11 +286,14 @@ ECHOES-OF-ASH/
 │   ├── player_2d.gd                         # Main player controller script
 │   ├── dash_module.gd                       # Standalone dash module
 │   ├── dash_integration_example.gd          # Example dash integration
+<<<<<<< HEAD
 │   ├── melee_combat_controller.gd           # Melee combat system
 │   ├── hitbox.gd                            # Offensive collision detection
 │   ├── hurtbox.gd                           # Defensive collision detection
 │   ├── combat_integration_example.gd        # Example combat integration
 │   ├── test_combat_system.gd                # Combat system tests
+=======
+>>>>>>> refs/remotes/origin/main
 │   ├── enemy_ai.gd                          # Modular enemy AI controller
 │   ├── enemy_integration_example.gd         # Example enemy integration
 │   ├── enemy_ai_test.gd                     # Enemy AI test scene script
@@ -317,11 +320,14 @@ ECHOES-OF-ASH/
 ├── TEST_ENEMY_AI.md                         # Enemy AI testing procedures
 ├── FSM_IMPLEMENTATION_SUMMARY.md            # Player FSM documentation
 ├── DASH_MODULE.md                           # Dash module documentation
+<<<<<<< HEAD
 ├── MELEE_COMBAT_SYSTEM.md                   # Combat system documentation
 ├── COMBAT_QUICK_REFERENCE.md                # Quick setup guide for combat
 ├── TEST_COMBAT_SYSTEM.md                    # Combat testing procedures
 ├── COMBAT_IMPLEMENTATION_SUMMARY.md         # Complete combat summary
 ├── PROJECT_HEALTH_REPORT.md                 # Project health analysis
+=======
+>>>>>>> refs/remotes/origin/main
 ├── LIGHTING_IMPLEMENTATION_SUMMARY.md       # Complete lighting documentation
 ├── PARTICLE_MANAGER_IMPLEMENTATION_SUMMARY.md # Complete particle documentation
 ├── ATMOSPHERIC_QUICK_REFERENCE.md           # Quick setup for lighting & particles
@@ -360,6 +366,7 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `lock_direction`: Prevents direction change during dash (default: true)
 - `dash_control`: Control influence during unlocked dash (default: 0.8)
 
+<<<<<<< HEAD
 ### Combat Parameters (MeleeCombatController)
 - `attack_1_duration`: Duration of first attack (default: 0.3 seconds)
 - `attack_2_duration`: Duration of second attack (default: 0.35 seconds)
@@ -380,6 +387,8 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `weight`: Entity weight affecting knockback (default: 1.0)
 - `vulnerable`: Whether hurtbox can take damage (default: true)
 
+=======
+>>>>>>> refs/remotes/origin/main
 ### Camera Parameters (CinematicCamera2D)
 - `damping_speed_x`: Horizontal follow smoothness (default: 5.0)
 - `damping_speed_y`: Vertical follow smoothness (default: 5.0)
@@ -439,6 +448,7 @@ To integrate the dash module into your game:
 
 Example integration code is provided in `scripts/dash_integration_example.gd`.
 
+<<<<<<< HEAD
 ### Using the Melee Combat System
 
 To integrate the combat system into your game:
@@ -453,6 +463,8 @@ To integrate the combat system into your game:
 Example integration code is provided in `scripts/combat_integration_example.gd`.
 For complete documentation, see [MELEE_COMBAT_SYSTEM.md](MELEE_COMBAT_SYSTEM.md).
 
+=======
+>>>>>>> refs/remotes/origin/main
 ### Using the Enemy AI
 
 To integrate enemy AI into your game:
