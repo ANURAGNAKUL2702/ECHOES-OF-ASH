@@ -139,7 +139,9 @@ func _find_node_of_type(node: Node, type_name: String) -> Node:
 		# Fallback: check script path filename (for scripts without class_name)
 		if script.resource_path != "":
 			var script_name: String = script.resource_path.get_file().get_basename()
-			if script_name == type_name.to_snake_case():
+			# Convert PascalCase to snake_case for comparison
+			var snake_case_name: String = _to_snake_case(type_name)
+			if script_name == snake_case_name:
 				return node
 	
 	# Check children recursively
@@ -149,6 +151,24 @@ func _find_node_of_type(node: Node, type_name: String) -> Node:
 			return result
 	
 	return null
+
+
+func _to_snake_case(text: String) -> String:
+	## Convert PascalCase to snake_case
+	##
+	## Parameters:
+	##   text: PascalCase string to convert
+	##
+	## Returns:
+	##   snake_case version of the string
+	
+	var result: String = ""
+	for i in range(text.length()):
+		var c: String = text[i]
+		if c == c.to_upper() and i > 0:
+			result += "_"
+		result += c.to_lower()
+	return result
 
 
 # ============================================================================

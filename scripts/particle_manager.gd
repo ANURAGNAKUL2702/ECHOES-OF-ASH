@@ -342,9 +342,9 @@ func _spawn_particle_effect(effect_type: String, pos: Vector2, direction: Vector
 		var angle: float = direction.angle()
 		initial_vel = initial_vel.rotated(angle)
 	
-	# Normalize direction for material (expects unit vector)
-	var normalized_direction: Vector3 = Vector3(initial_vel.x, initial_vel.y, 0).normalized()
-	material.direction = normalized_direction
+	# Normalize velocity for material direction (expects unit vector)
+	var normalized_velocity: Vector3 = Vector3(initial_vel.x, initial_vel.y, 0).normalized()
+	material.direction = normalized_velocity
 	material.initial_velocity_min = initial_vel.length() * 0.8
 	material.initial_velocity_max = initial_vel.length() * 1.2
 	
@@ -420,7 +420,7 @@ func _cleanup_finished_particles() -> void:
 	var i: int = _active_particles.size() - 1
 	while i >= 0:
 		var particles: GPUParticles2D = _active_particles[i]
-		if not is_instance_valid(particles) or (not particles.emitting and not particles.is_emitting()):
+		if not is_instance_valid(particles) or not particles.is_emitting():
 			_active_particles.remove_at(i)
 		i -= 1
 

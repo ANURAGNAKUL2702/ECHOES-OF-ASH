@@ -174,16 +174,28 @@ func _setup_fog_layers() -> void:
 		fog_layer.name = "FogLayer" + str(i)
 		fog_layer.color = fog_color
 		
-		# Make fog layers semi-transparent and vary by layer for depth effect
-		# Each layer becomes progressively more transparent using the depth variation factor
-		var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * fog_depth_variation)
-		fog_layer.color.a = fog_color.a * alpha_variation
+		# Apply depth-based alpha variation for fog layers
+		fog_layer.color.a = _calculate_fog_alpha_for_layer(i)
 		
 		# Set size to cover viewport (will be adjusted in viewport)
 		fog_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
 		fog_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		_fog_container.add_child(fog_layer)
+
+
+func _calculate_fog_alpha_for_layer(layer_index: int) -> float:
+	## Calculate alpha value for a fog layer based on depth variation
+	##
+	## Parameters:
+	##   layer_index: Index of the fog layer (0 = front, higher = back)
+	##
+	## Returns:
+	##   Alpha value for the layer (0.0 to 1.0)
+	##
+	## Each layer becomes progressively more transparent to create depth effect
+	var alpha_variation: float = 1.0 - (float(layer_index) / float(fog_layer_count) * fog_depth_variation)
+	return fog_color.a * alpha_variation
 
 
 func setup_player_light(player: Node2D) -> void:
@@ -334,13 +346,12 @@ func set_fog_color(color: Color) -> void:
 	
 	fog_color = color
 	
-	# Update existing fog layers with depth variation
+	# Update existing fog layers with depth-based alpha
 	for i in range(_fog_container.get_child_count()):
 		var fog_layer: ColorRect = _fog_container.get_child(i) as ColorRect
 		if fog_layer:
-			var alpha_variation: float = 1.0 - (float(i) / float(fog_layer_count) * fog_depth_variation)
 			fog_layer.color = color
-			fog_layer.color.a = color.a * alpha_variation
+			fog_layer.color.a = _calculate_fog_alpha_for_layer(i)
 
 
 # ============================================================================
