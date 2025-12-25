@@ -1,8 +1,50 @@
 # ECHOES OF ASH
 
-A Godot 4 game project featuring a production-quality 2D player movement controller.
+A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, and a cinematic camera controller.
 
 ## Features
+
+### Cinematic Camera Controller
+
+The game includes a comprehensive cinematic camera system (`CinematicCamera2D`) with professional camera behaviors:
+
+#### 1. Smooth Camera Follow
+- **Configurable Damping**: Independent X/Y axis damping for smooth follow effect
+- **Flexible Targeting**: Can follow any Node2D or automatically follow parent
+- **Player Independence**: No direct dependencies on player movement logic
+- **Toggle Capability**: Switch between smooth and instant follow modes
+
+#### 2. Screen Shake Effects
+- **Dynamic Shake**: Trigger shake with custom intensity and duration
+- **Smooth Oscillation**: Natural-looking shake using sine/cosine waves
+- **Automatic Decay**: Shake intensity decreases smoothly over time
+- **Configurable Frequency**: Adjust shake speed for different impact types
+- **Signal-Based**: Emits signals when shake starts and ends
+
+#### 3. Dynamic Zoom
+- **Smooth Transitions**: Interpolated zoom changes for cinematic effect
+- **Multiple Methods**: Zoom in, out, reset, or set specific levels
+- **Clamped Range**: Respects min/max zoom constraints
+- **Instant Option**: Bypass smoothing for immediate zoom changes
+- **Signal Notifications**: Emits events on zoom changes
+
+#### 4. Dead-Zone Support
+- **Optional Feature**: Enable/disable as needed for different game modes
+- **Configurable Size**: Adjust dead-zone width and height independently
+- **Smooth Boundaries**: Camera only moves when target leaves dead-zone area
+- **Platformer-Friendly**: Great for stable platforming camera behavior
+
+#### 5. Exposed API
+- **Public Methods**: `shake()` and `set_zoom()` for triggering effects
+- **Query Methods**: Check camera state (is shaking, current zoom, etc.)
+- **Signal System**: React to camera events in game code
+- **Target Control**: Change follow targets dynamically
+
+#### 6. Code Quality
+- Clean, well-documented code with comprehensive inline documentation
+- Fully configurable via @export parameters in Godot editor
+- Type-safe implementation with proper type hints
+- Test scene and integration examples provided
 
 ### Enemy AI System
 
@@ -140,22 +182,28 @@ The game includes a robust 2D player movement controller (`Player2D`) with the f
 ```
 ECHOES-OF-ASH/
 ├── scripts/
-│   ├── player_2d.gd                    # Main player controller script
-│   ├── dash_module.gd                  # Standalone dash module
-│   ├── dash_integration_example.gd     # Example dash integration
-│   ├── enemy_ai.gd                     # Modular enemy AI controller
-│   ├── enemy_integration_example.gd    # Example enemy integration
-│   └── enemy_ai_test.gd                # Enemy AI test scene script
+│   ├── player_2d.gd                     # Main player controller script
+│   ├── dash_module.gd                   # Standalone dash module
+│   ├── dash_integration_example.gd      # Example dash integration
+│   ├── enemy_ai.gd                      # Modular enemy AI controller
+│   ├── enemy_integration_example.gd     # Example enemy integration
+│   ├── enemy_ai_test.gd                 # Enemy AI test scene script
+│   ├── cinematic_camera_2d.gd           # Cinematic camera controller
+│   └── camera_test.gd                   # Camera test scene script
 ├── scenes/
-│   ├── player.tscn                     # Player scene
-│   ├── enemy.tscn                      # Example enemy scene
-│   ├── enemy_ai_test.tscn              # Enemy AI test scene
-│   └── main.tscn                       # Main game scene with platforms
-├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md  # Complete enemy AI documentation
-├── ENEMY_AI_QUICK_REFERENCE.md         # Quick setup guide for enemy AI
-├── TEST_ENEMY_AI.md                    # Enemy AI testing procedures
-├── FSM_IMPLEMENTATION_SUMMARY.md       # Player FSM documentation
-├── DASH_MODULE.md                      # Dash module documentation
+│   ├── player.tscn                      # Player scene
+│   ├── enemy.tscn                       # Example enemy scene
+│   ├── enemy_ai_test.tscn               # Enemy AI test scene
+│   ├── camera_test.tscn                 # Camera test scene
+│   └── main.tscn                        # Main game scene with platforms
+├── CAMERA_IMPLEMENTATION_SUMMARY.md     # Complete camera documentation
+├── CAMERA_QUICK_REFERENCE.md            # Quick setup guide for camera
+├── TEST_CAMERA.md                       # Camera testing procedures
+├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md   # Complete enemy AI documentation
+├── ENEMY_AI_QUICK_REFERENCE.md          # Quick setup guide for enemy AI
+├── TEST_ENEMY_AI.md                     # Enemy AI testing procedures
+├── FSM_IMPLEMENTATION_SUMMARY.md        # Player FSM documentation
+├── DASH_MODULE.md                       # Dash module documentation
 ├── icon.svg                            # Project icon
 ├── project.godot                       # Godot project configuration
 └── README.md                           # This file
@@ -191,6 +239,20 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `lock_direction`: Prevents direction change during dash (default: true)
 - `dash_control`: Control influence during unlocked dash (default: 0.8)
 
+### Camera Parameters (CinematicCamera2D)
+- `damping_speed_x`: Horizontal follow smoothness (default: 5.0)
+- `damping_speed_y`: Vertical follow smoothness (default: 5.0)
+- `base_zoom`: Default camera zoom level (default: Vector2(1.5, 1.5))
+- `zoom_speed`: Zoom transition speed (default: 3.0)
+- `min_zoom`: Minimum zoom level (default: Vector2(0.5, 0.5))
+- `max_zoom`: Maximum zoom level (default: Vector2(3.0, 3.0))
+- `default_shake_intensity`: Default shake strength in pixels (default: 10.0)
+- `default_shake_duration`: Default shake duration in seconds (default: 0.3)
+- `shake_decay`: How quickly shake fades (default: 5.0)
+- `shake_frequency`: Shake oscillation speed (default: 15.0)
+- `dead_zone_width`: Dead-zone width in pixels (default: 100.0)
+- `dead_zone_height`: Dead-zone height in pixels (default: 80.0)
+
 ## Technical Details
 
 ### Implementation Highlights
@@ -212,6 +274,16 @@ The `DashModule` is a standalone node that can be added to any project:
 4. **Flexible Integration**: Works with any `CharacterBody2D` through the `dash(player)` method
 5. **Separation of Concerns**: Does NOT read input directly - input handling is external
 6. **Query Methods**: Provides `can_dash()`, `is_dashing()`, `is_invincible()` for state checking
+
+The `CinematicCamera2D` extends Godot's Camera2D with cinematic features:
+
+1. **Smooth Follow System**: Configurable damping with independent X/Y axis control
+2. **Screen Shake**: Sine/cosine wave-based shake with automatic decay
+3. **Dynamic Zoom**: Smooth interpolated zoom with clamped min/max values
+4. **Dead-Zone Support**: Optional feature for stable platforming cameras
+5. **Player Independence**: Works with any Node2D target, not just players
+6. **Signal System**: Emits events for shake and zoom changes
+7. **Performance Optimized**: Minimal calculations, cached references, frame-rate independent
 
 ### Using the Dash Module
 
@@ -239,6 +311,21 @@ To integrate enemy AI into your game:
 
 Quick setup guide is provided in `ENEMY_AI_QUICK_REFERENCE.md`.
 Complete documentation is in `ENEMY_AI_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Cinematic Camera
+
+To integrate the cinematic camera into your game:
+
+1. **Add Camera to Scene**: Add a Camera2D node to your player or scene
+2. **Attach Script**: Attach `cinematic_camera_2d.gd` to the Camera2D node
+3. **Enable Camera**: Check "Current" in the Inspector to enable the camera
+4. **Configure Parameters**: Adjust damping, zoom, shake, and dead-zone settings in the inspector
+5. **Trigger Effects**: Call `camera.shake()` for impacts, `camera.set_zoom()` for dramatic moments
+6. **Connect Signals**: Connect to `shake_started`, `zoom_changed` for visual/audio feedback
+7. **Test**: Use `camera_test.tscn` to test all camera features
+
+Quick setup guide is provided in `CAMERA_QUICK_REFERENCE.md`.
+Complete documentation is in `CAMERA_IMPLEMENTATION_SUMMARY.md`.
 
 ### Godot 4 Compatibility
 
