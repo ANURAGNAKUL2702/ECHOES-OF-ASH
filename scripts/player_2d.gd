@@ -51,6 +51,10 @@ var previous_state: State = State.IDLE
 ## Air resistance multiplier when in the air (0.0 to 1.0)
 @export_range(0.0, 1.0) var air_resistance: float = 0.5
 
+## Movement threshold for state detection (pixels per second)
+## Used to determine if the player is moving or idle
+@export var movement_threshold: float = 0.1
+
 # ============================================================================
 # JUMP PARAMETERS
 # ============================================================================
@@ -325,15 +329,15 @@ func physics_update_state() -> void:
 	# Determine the appropriate state based on player movement
 	if not is_on_floor():
 		# Player is in the air
-		if velocity.y < 0:
-			# Moving upward - jumping
+		if velocity.y <= 0:
+			# Moving upward or at peak of jump
 			new_state = State.JUMP
 		else:
 			# Moving downward - falling
 			new_state = State.FALL
 	else:
 		# Player is on the ground
-		if abs(velocity.x) > 0.1:
+		if abs(velocity.x) > movement_threshold:
 			# Moving horizontally - running
 			new_state = State.RUN
 		else:
@@ -354,7 +358,7 @@ func get_movement_direction() -> float:
 
 func is_moving() -> bool:
 	## Returns true if the player is moving horizontally
-	return abs(velocity.x) > 0.1
+	return abs(velocity.x) > movement_threshold
 
 
 func is_jumping() -> bool:
