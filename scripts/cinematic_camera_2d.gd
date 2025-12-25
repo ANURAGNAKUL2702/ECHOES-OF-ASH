@@ -113,6 +113,9 @@ var _base_camera_position: Vector2 = Vector2.ZERO
 ## Cache of the target node for performance
 var _cached_target: Node2D = null
 
+## Accumulated time for smooth shake oscillation
+var _shake_time: float = 0.0
+
 # ============================================================================
 # SIGNALS
 # ============================================================================
@@ -181,7 +184,6 @@ func _update_follow(delta: float) -> void:
 	# Ensure we have a valid target
 	if not _cached_target:
 		_update_target_cache()
-		return
 	
 	if not _cached_target or not is_instance_valid(_cached_target):
 		return
@@ -246,19 +248,23 @@ func _update_shake(delta: float) -> void:
 		# No active shake
 		_shake_offset = Vector2.ZERO
 		_current_shake_intensity = 0.0
+		_shake_time = 0.0
 		return
 	
-	# Decrease shake time
+	# Accumulate time for smooth oscillation
+	_shake_time += delta
+	
+	# Decrease shake time remaining
 	_shake_time_remaining -= delta
 	
 	# Decay shake intensity over time
 	_current_shake_intensity = max(0.0, _current_shake_intensity - shake_decay * delta)
 	
 	# Generate shake offset using sine wave for smooth oscillation
+	# Using accumulated time for frame-rate independent shake
 	var shake_amount = _current_shake_intensity
-	var time_seconds = Time.get_ticks_msec() * MS_TO_SECONDS
-	_shake_offset.x = sin(time_seconds * shake_frequency) * shake_amount
-	_shake_offset.y = cos(time_seconds * shake_frequency * 0.7) * shake_amount
+	_shake_offset.x = sin(_shake_time * shake_frequency) * shake_amount
+	_shake_offset.y = cos(_shake_time * shake_frequency * 0.7) * shake_amount
 	
 	# Check if shake has ended
 	if _shake_time_remaining <= 0.0:

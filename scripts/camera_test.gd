@@ -67,8 +67,8 @@ func _process(delta: float) -> void:
 	if Input.is_key_label_pressed(KEY_R):
 		camera.zoom_out(0.01)
 	
-	# Reset zoom (T or Insert key)
-	if Input.is_key_label_just_pressed(KEY_T) or Input.is_action_just_pressed("ui_text_toggle_insert_mode"):
+	# Reset zoom (T key or Insert key)
+	if Input.is_key_label_just_pressed(KEY_T) or Input.is_key_label_just_pressed(KEY_INSERT):
 		print("Resetting zoom!")
 		camera.reset_zoom()
 	
