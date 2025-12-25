@@ -53,30 +53,22 @@ func _process(delta: float) -> void:
 	if not camera:
 		return
 	
-	# Test screen shake
-	if Input.is_action_just_pressed("ui_focus_prev") and test_shake_cooldown <= 0.0:  # Q key
+	# Test screen shake (Q key)
+	if Input.is_key_label_just_pressed(KEY_Q) and test_shake_cooldown <= 0.0:
 		print("Triggering screen shake!")
 		camera.shake(15.0, 0.5)
 		test_shake_cooldown = 0.6
 	
-	# Test zoom in
-	if Input.is_action_just_pressed("ui_select"):  # Space - but we'll use E
-		print("Zooming in!")
-		camera.zoom_in(0.3)
-	
-	# Test zoom out  
-	if Input.is_action_pressed("ui_cancel"):  # Escape - but we'll use R
-		print("Zooming out!")
-		camera.zoom_out(0.3)
-	
-	# For actual testing, let's add key detection
-	if Input.is_key_pressed(KEY_E):
+	# Test zoom in (E key - hold for continuous zoom)
+	if Input.is_key_label_pressed(KEY_E):
 		camera.zoom_in(0.01)
 	
-	if Input.is_key_pressed(KEY_R):
+	# Test zoom out (R key - hold for continuous zoom)
+	if Input.is_key_label_pressed(KEY_R):
 		camera.zoom_out(0.01)
 	
-	if Input.is_action_just_pressed("ui_text_toggle_insert_mode"):  # T key (Insert)
+	# Reset zoom (T or Insert key)
+	if Input.is_key_label_just_pressed(KEY_T) or Input.is_action_just_pressed("ui_text_toggle_insert_mode"):
 		print("Resetting zoom!")
 		camera.reset_zoom()
 	
