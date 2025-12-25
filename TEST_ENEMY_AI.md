@@ -466,9 +466,28 @@ All tests should pass with:
 - No errors in console
 - Stable performance
 
-## Known Issues
+## Known Limitations & Considerations
 
-None! The system is production-ready. 🎉
+While the system is fully functional and production-ready, consider these limitations:
+
+1. **Navigation**: Current implementation uses simple movement toward target
+   - Does not use NavigationAgent2D for complex pathfinding
+   - May get stuck on complex obstacles without navigation mesh
+
+2. **Performance**: Detection checks run every physics frame
+   - Consider throttling detection for scenes with many enemies
+   - Use VisibleOnScreenNotifier2D to disable distant enemies
+
+3. **Detection Precision**: RayCast2D checks from enemy center point
+   - May not account for enemy size in detection
+   - Consider using multiple raycasts for more accurate detection
+
+4. **State Machine Complexity**: Adding many custom states may require refactoring
+   - Current design is optimized for the 6 implemented states
+   - Complex AI behaviors may benefit from hierarchical state machines
+
+5. **Multiplayer**: Not designed for networked multiplayer
+   - Would require synchronization logic for authority and state replication
 
 ---
 
