@@ -18,6 +18,13 @@ extends Camera2D
 class_name CinematicCamera2D
 
 # ============================================================================
+# CONSTANTS
+# ============================================================================
+
+## Constant for milliseconds to seconds conversion
+const MS_TO_SECONDS: float = 0.001
+
+# ============================================================================
 # CAMERA FOLLOW PARAMETERS
 # ============================================================================
 
@@ -249,7 +256,7 @@ func _update_shake(delta: float) -> void:
 	
 	# Generate shake offset using sine wave for smooth oscillation
 	var shake_amount = _current_shake_intensity
-	var time_seconds = Time.get_ticks_msec() * 0.001
+	var time_seconds = Time.get_ticks_msec() * MS_TO_SECONDS
 	_shake_offset.x = sin(time_seconds * shake_frequency) * shake_amount
 	_shake_offset.y = cos(time_seconds * shake_frequency * 0.7) * shake_amount
 	

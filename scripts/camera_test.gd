@@ -81,9 +81,6 @@ func _process(delta: float) -> void:
 		camera.reset_zoom()
 	
 	# Toggle smooth follow with F
-	if Input.is_physical_key_pressed(KEY_F) and not Input.is_physical_key_pressed(KEY_F):
-		pass  # This was creating an issue, using direct key check below instead
-	
 	if Input.is_key_label_just_pressed(KEY_F):
 		camera.smooth_follow = not camera.smooth_follow
 		print("Smooth follow: ", camera.smooth_follow)
