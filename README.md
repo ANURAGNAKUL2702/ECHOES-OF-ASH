@@ -1,6 +1,6 @@
 # ECHOES OF ASH
 
-A Godot 4 game project featuring a production-quality 2D player movement controller.
+A Godot 4 game project featuring production-quality 2D player movement, dash mechanics, and melee combat systems.
 
 ## Features
 
@@ -59,6 +59,44 @@ The game includes a standalone, modular dash system (`DashModule`) for adding da
 - Type-safe implementation with proper type hints
 - Example integration script provided (`dash_integration_example.gd`)
 
+### Melee Combat System
+
+The game includes a modular melee combat controller (`MeleeCombatController`) for 2D action games:
+
+#### 1. Combat Mechanics
+- **Directional Melee Attacks**: Attack in different directions (left/right)
+- **3-Hit Combo System**: Progressive combo chain with reset timer
+- **Knockback Effects**: Scaled by enemy weight for dynamic physics
+- **Attack Queuing**: Queue next attack during current attack
+- **Configurable Parameters**: Adjust damage, knockback, and timing per combo hit
+
+#### 2. Hitbox and Hurtbox System
+- **Hitbox**: Modular offensive collision detection for attacks
+- **Hurtbox**: Modular defensive collision detection for receiving damage
+- **Automatic Collision Management**: Proper layer/mask configuration
+- **Signal-Based**: Loose coupling through signal emissions
+
+#### 3. Damage Handling
+- **Invincibility Frames (i-frames)**: Temporary invincibility after taking damage
+- **Weight-Based Knockback**: Heavier enemies receive less knockback
+- **Automatic Knockback Application**: Applied to CharacterBody2D targets
+- **Damage Signals**: React to damage events for visual/audio feedback
+
+#### 4. Modular Design
+- **No Movement Dependency**: Combat system is independent of player movement
+- **Separation of Concerns**: Input handling is external to combat logic
+- **Extensible Architecture**: Easy to add new attack types or abilities
+- **Reusable Components**: Hitbox/Hurtbox can be used for any game object
+
+#### 5. Code Quality
+- Comprehensive documentation with inline comments
+- Export variables for inspector configuration
+- Type-safe implementation with proper type hints
+- Example integration script provided (`combat_integration_example.gd`)
+- Follows Godot 4 best practices
+
+For detailed documentation, see [MELEE_COMBAT_SYSTEM.md](MELEE_COMBAT_SYSTEM.md).
+
 ### Player Movement Controller
 
 The game includes a robust 2D player movement controller (`Player2D`) with the following features:
@@ -96,21 +134,27 @@ The game includes a robust 2D player movement controller (`Player2D`) with the f
 - **Move Left**: A or Left Arrow
 - **Move Right**: D or Right Arrow  
 - **Jump**: Space, W, or Up Arrow
+- **Attack**: J or Z
 
 ## Project Structure
 
 ```
 ECHOES-OF-ASH/
 ├── scripts/
-│   ├── player_2d.gd                    # Main player controller script
-│   ├── dash_module.gd                  # Standalone dash module
-│   └── dash_integration_example.gd     # Example dash integration
+│   ├── player_2d.gd                      # Main player controller script
+│   ├── dash_module.gd                    # Standalone dash module
+│   ├── dash_integration_example.gd       # Example dash integration
+│   ├── melee_combat_controller.gd        # Melee combat system
+│   ├── hitbox.gd                         # Offensive collision detection
+│   ├── hurtbox.gd                        # Defensive collision detection
+│   └── combat_integration_example.gd     # Example combat integration
 ├── scenes/
-│   ├── player.tscn                     # Player scene
-│   └── main.tscn                       # Main game scene with platforms
-├── icon.svg                            # Project icon
-├── project.godot                       # Godot project configuration
-└── README.md                           # This file
+│   ├── player.tscn                       # Player scene
+│   └── main.tscn                         # Main game scene with platforms
+├── icon.svg                              # Project icon
+├── project.godot                         # Godot project configuration
+├── MELEE_COMBAT_SYSTEM.md                # Combat system documentation
+└── README.md                             # This file
 ```
 
 ## Customization
@@ -142,6 +186,26 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 - `enabled`: Whether dash is unlocked (default: true)
 - `lock_direction`: Prevents direction change during dash (default: true)
 - `dash_control`: Control influence during unlocked dash (default: 0.8)
+
+### Combat Parameters (MeleeCombatController)
+- `attack_1_duration`: Duration of first attack (default: 0.3 seconds)
+- `attack_2_duration`: Duration of second attack (default: 0.35 seconds)
+- `attack_3_duration`: Duration of third attack (default: 0.4 seconds)
+- `combo_window`: Time to continue combo after attack (default: 0.5 seconds)
+- `combo_reset_time`: Time before combo resets (default: 1.0 second)
+- `attack_1_damage`: Damage of first attack (default: 10.0)
+- `attack_2_damage`: Damage of second attack (default: 15.0)
+- `attack_3_damage`: Damage of third attack (default: 25.0)
+- `attack_1_knockback`: Knockback of first attack (default: 200.0)
+- `attack_2_knockback`: Knockback of second attack (default: 300.0)
+- `attack_3_knockback`: Knockback of third attack (default: 500.0)
+- `enabled`: Whether combat is enabled (default: true)
+- `attack_range`: Attack range from player center (default: 40.0 pixels)
+
+### Hurtbox Parameters
+- `iframe_duration`: Invincibility frame duration (default: 0.5 seconds)
+- `weight`: Entity weight affecting knockback (default: 1.0)
+- `vulnerable`: Whether hurtbox can take damage (default: true)
 
 ## Technical Details
 
@@ -177,6 +241,20 @@ To integrate the dash module into your game:
 6. **Query State**: Use `is_dashing()` and `is_invincible()` for gameplay logic
 
 Example integration code is provided in `scripts/dash_integration_example.gd`.
+
+### Using the Melee Combat System
+
+To integrate the combat system into your game:
+
+1. **Add the Controller**: Add a `MeleeCombatController` node to your player
+2. **Add Hitbox**: Add a `Hitbox` node as a child of the combat controller with a CollisionShape2D
+3. **Add Hurtbox**: Add a `Hurtbox` node to your player with a CollisionShape2D
+4. **Configure Parameters**: Adjust damage, knockback, and timing in the inspector
+5. **Handle Input**: In your input handler, call `combat_controller.attack(direction)` when attack is pressed
+6. **React to Events**: Connect to signals for visual/audio feedback
+
+Example integration code is provided in `scripts/combat_integration_example.gd`.
+For complete documentation, see [MELEE_COMBAT_SYSTEM.md](MELEE_COMBAT_SYSTEM.md).
 
 ### Godot 4 Compatibility
 
