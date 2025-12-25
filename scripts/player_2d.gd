@@ -76,6 +76,9 @@ var _time_since_jump_pressed: float = 0.0
 ## Flag to prevent multiple jumps from a single button press
 var _jump_consumed: bool = false
 
+## Flag to track if player is in an active jump (for variable jump height)
+var _is_jumping: bool = false
+
 ## Cache for the project's default gravity
 var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -85,8 +88,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
 	## Initialize the player controller
-	# Ensure the gravity is properly set
-	_gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+	pass
 
 
 func _physics_process(delta: float) -> void:
@@ -170,9 +172,14 @@ func _apply_gravity(delta: float) -> void:
 	# Apply stronger gravity when falling
 	if velocity.y > 0:
 		current_gravity *= fall_gravity_multiplier
+		_is_jumping = false  # No longer jumping if falling
 	# Apply reduced gravity when holding jump (for variable jump height)
-	elif velocity.y < 0 and Input.is_action_pressed("jump") and not _jump_consumed:
+	elif velocity.y < 0 and Input.is_action_pressed("jump") and _is_jumping:
 		current_gravity *= jump_height_control
+	else:
+		# If not holding jump or moving up, end the jump state
+		if velocity.y < 0 and not Input.is_action_pressed("jump"):
+			_is_jumping = false
 	
 	# Apply gravity and clamp to max fall speed
 	velocity.y = min(velocity.y + current_gravity * delta, max_fall_speed)
@@ -199,6 +206,7 @@ func _apply_jump() -> void:
 	if has_buffered_jump and can_coyote_jump and not _jump_consumed:
 		velocity.y = jump_velocity
 		_jump_consumed = true
+		_is_jumping = true  # Start jump state for variable height
 		# Reset timers to prevent further jumps
 		_time_since_grounded = coyote_time + 1.0
 		_time_since_jump_pressed = jump_buffer_time + 1.0
@@ -221,6 +229,7 @@ func _update_grounded_state() -> void:
 		# Reset timers when on the ground
 		_time_since_grounded = 0.0
 		_jump_consumed = false
+		_is_jumping = false
 
 # ============================================================================
 # PUBLIC API METHODS
