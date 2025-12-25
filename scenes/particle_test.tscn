@@ -1,0 +1,122 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqf4g3rmyk6pa"]
+
+[ext_resource type="Script" path="res://scripts/particle_test.gd" id="1_particle_test"]
+[ext_resource type="Script" path="res://scripts/particle_manager.gd" id="2_particle_manager"]
+[ext_resource type="Script" path="res://scripts/player_2d.gd" id="3_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(32, 64)
+
+[node name="ParticleTest" type="Node2D"]
+script = ExtResource("1_particle_test")
+
+[node name="ParticleManager" type="Node2D" parent="."]
+script = ExtResource("2_particle_manager")
+enable_dash_trails = true
+dash_trail_amount = 5
+enable_impacts = true
+impact_particle_count = 20
+enable_dust = true
+dust_particle_count = 12
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
+position = Vector2(640, 400)
+script = ExtResource("3_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Sprite2D" type="ColorRect" parent="Player"]
+offset_left = -16.0
+offset_top = -32.0
+offset_right = 16.0
+offset_bottom = 32.0
+color = Color(0.282353, 0.572549, 0.847059, 1)
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Ground" type="StaticBody2D" parent="Platforms"]
+position = Vector2(640, 680)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Ground"]
+shape = SubResource("RectangleShape2D_player")
+scale = Vector2(25, 0.625)
+
+[node name="ColorRect" type="ColorRect" parent="Platforms/Ground"]
+offset_left = -400.0
+offset_top = -20.0
+offset_right = 400.0
+offset_bottom = 20.0
+color = Color(0.337255, 0.235294, 0.184314, 1)
+
+[node name="Platform1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(300, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform1"]
+shape = SubResource("RectangleShape2D_player")
+scale = Vector2(3, 0.625)
+
+[node name="ColorRect" type="ColorRect" parent="Platforms/Platform1"]
+offset_left = -48.0
+offset_top = -20.0
+offset_right = 48.0
+offset_bottom = 20.0
+color = Color(0.337255, 0.235294, 0.184314, 1)
+
+[node name="Platform2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(800, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform2"]
+shape = SubResource("RectangleShape2D_player")
+scale = Vector2(3, 0.625)
+
+[node name="ColorRect" type="ColorRect" parent="Platforms/Platform2"]
+offset_left = -48.0
+offset_top = -20.0
+offset_right = 48.0
+offset_bottom = 20.0
+color = Color(0.337255, 0.235294, 0.184314, 1)
+
+[node name="Platform3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1100, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform3"]
+shape = SubResource("RectangleShape2D_player")
+scale = Vector2(3, 0.625)
+
+[node name="ColorRect" type="ColorRect" parent="Platforms/Platform3"]
+offset_left = -48.0
+offset_top = -20.0
+offset_right = 48.0
+offset_bottom = 20.0
+color = Color(0.337255, 0.235294, 0.184314, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+zoom = Vector2(1.2, 1.2)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "Particle Manager Test
+
+Controls:
+  Q - Hold for continuous dash trail
+  W - Spawn impact at player
+  E - Spawn dust at player
+  R - Spawn explosion (custom effect)
+  1 - Toggle dash trails
+  2 - Toggle impacts
+  3 - Toggle dust
+  C - Clear all particles
+  WASD/Arrows - Move player
+  Space - Jump"

@@ -1,8 +1,70 @@
 # ECHOES OF ASH
 
-A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, and a cinematic camera controller.
+A Godot 4 game project featuring production-quality 2D systems including player movement, enemy AI, dash mechanics, a cinematic camera controller, atmospheric lighting, and a modular particle system.
 
 ## Features
+
+### Atmospheric Lighting System
+
+The game includes a comprehensive atmospheric lighting system (`LightingSystem`) for creating immersive 2D environments:
+
+#### 1. Player-Following Light
+- **Smooth Follow**: Configurable smoothing for natural light movement
+- **Customizable Properties**: Adjust energy, color, scale, and offset
+- **Runtime Control**: Enable/disable and modify properties during gameplay
+- **Performance Optimized**: Minimal overhead with efficient updates
+
+#### 2. Flickering Environmental Lights
+- **Natural Animation**: Sine wave-based flickering with unique phases
+- **Easy Placement**: Add lights at any position with custom colors
+- **Dynamic Management**: Add/remove lights at runtime
+- **Atmospheric Variation**: Each light has random frequency for natural feel
+
+#### 3. Fog Layers
+- **Multi-Layer Depth**: Configurable layer count for atmospheric depth
+- **Color Customization**: Adjust fog color and transparency
+- **Automatic Variation**: Layers have graduated alpha for depth effect
+- **Toggle Support**: Enable/disable fog based on game state
+
+#### 4. Performance-Safe Defaults
+- Optimized for various hardware configurations
+- Minimal per-frame calculations
+- Efficient light and fog management
+- Frame-rate independent animations
+
+### Particle Manager
+
+The game includes a modular particle effect system (`ParticleManager`) for dynamic visual feedback:
+
+#### 1. Dash Trail Particles
+- **Automatic Emission**: Follows player during dash action
+- **Configurable Properties**: Adjust color, lifetime, and particle count
+- **Signal Integration**: Works seamlessly with DashModule
+- **Smooth Trails**: Timed emission for consistent trail effect
+
+#### 2. Impact Particles
+- **Directional Spread**: Particles respect impact direction
+- **Combat Ready**: Perfect for hit effects and collisions
+- **Gravity Support**: Realistic particle physics
+- **Configurable Velocity**: Adjust speed and spread angle
+
+#### 3. Dust Particles
+- **Landing Effects**: Automatic dust on player landing
+- **Velocity Influenced**: Dust direction follows player movement
+- **Ground Interaction**: Perfect for platformer feel
+- **Adjustable Intensity**: Configure particle count and lifetime
+
+#### 4. Extensible Architecture
+- **Custom Effects**: Easy-to-add new particle types
+- **Dictionary Configuration**: Reusable effect templates
+- **No Hardcoding**: All effects use configuration system
+- **Future-Proof**: Design supports unlimited effect types
+
+#### 5. Performance Management
+- **Automatic Cleanup**: Old particles removed automatically
+- **Particle Limits**: Configurable maximum active particles
+- **GPU Acceleration**: Uses GPUParticles2D for efficiency
+- **Optimized Defaults**: Balanced visual quality and performance
 
 ### Cinematic Camera Controller
 
@@ -182,31 +244,41 @@ The game includes a robust 2D player movement controller (`Player2D`) with the f
 ```
 ECHOES-OF-ASH/
 ├── scripts/
-│   ├── player_2d.gd                     # Main player controller script
-│   ├── dash_module.gd                   # Standalone dash module
-│   ├── dash_integration_example.gd      # Example dash integration
-│   ├── enemy_ai.gd                      # Modular enemy AI controller
-│   ├── enemy_integration_example.gd     # Example enemy integration
-│   ├── enemy_ai_test.gd                 # Enemy AI test scene script
-│   ├── cinematic_camera_2d.gd           # Cinematic camera controller
-│   └── camera_test.gd                   # Camera test scene script
+│   ├── player_2d.gd                         # Main player controller script
+│   ├── dash_module.gd                       # Standalone dash module
+│   ├── dash_integration_example.gd          # Example dash integration
+│   ├── enemy_ai.gd                          # Modular enemy AI controller
+│   ├── enemy_integration_example.gd         # Example enemy integration
+│   ├── enemy_ai_test.gd                     # Enemy AI test scene script
+│   ├── cinematic_camera_2d.gd               # Cinematic camera controller
+│   ├── camera_test.gd                       # Camera test scene script
+│   ├── lighting_system.gd                   # Atmospheric lighting system
+│   ├── lighting_test.gd                     # Lighting test scene script
+│   ├── particle_manager.gd                  # Modular particle manager
+│   ├── particle_test.gd                     # Particle test scene script
+│   └── atmospheric_integration.gd           # Lighting & particle integration
 ├── scenes/
-│   ├── player.tscn                      # Player scene
-│   ├── enemy.tscn                       # Example enemy scene
-│   ├── enemy_ai_test.tscn               # Enemy AI test scene
-│   ├── camera_test.tscn                 # Camera test scene
-│   └── main.tscn                        # Main game scene with platforms
-├── CAMERA_IMPLEMENTATION_SUMMARY.md     # Complete camera documentation
-├── CAMERA_QUICK_REFERENCE.md            # Quick setup guide for camera
-├── TEST_CAMERA.md                       # Camera testing procedures
-├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md   # Complete enemy AI documentation
-├── ENEMY_AI_QUICK_REFERENCE.md          # Quick setup guide for enemy AI
-├── TEST_ENEMY_AI.md                     # Enemy AI testing procedures
-├── FSM_IMPLEMENTATION_SUMMARY.md        # Player FSM documentation
-├── DASH_MODULE.md                       # Dash module documentation
-├── icon.svg                            # Project icon
-├── project.godot                       # Godot project configuration
-└── README.md                           # This file
+│   ├── player.tscn                          # Player scene
+│   ├── enemy.tscn                           # Example enemy scene
+│   ├── enemy_ai_test.tscn                   # Enemy AI test scene
+│   ├── camera_test.tscn                     # Camera test scene
+│   ├── lighting_test.tscn                   # Lighting system test scene
+│   ├── particle_test.tscn                   # Particle manager test scene
+│   └── main.tscn                            # Main game scene with platforms
+├── CAMERA_IMPLEMENTATION_SUMMARY.md         # Complete camera documentation
+├── CAMERA_QUICK_REFERENCE.md                # Quick setup guide for camera
+├── TEST_CAMERA.md                           # Camera testing procedures
+├── ENEMY_AI_IMPLEMENTATION_SUMMARY.md       # Complete enemy AI documentation
+├── ENEMY_AI_QUICK_REFERENCE.md              # Quick setup guide for enemy AI
+├── TEST_ENEMY_AI.md                         # Enemy AI testing procedures
+├── FSM_IMPLEMENTATION_SUMMARY.md            # Player FSM documentation
+├── DASH_MODULE.md                           # Dash module documentation
+├── LIGHTING_IMPLEMENTATION_SUMMARY.md       # Complete lighting documentation
+├── PARTICLE_MANAGER_IMPLEMENTATION_SUMMARY.md # Complete particle documentation
+├── ATMOSPHERIC_QUICK_REFERENCE.md           # Quick setup for lighting & particles
+├── icon.svg                                # Project icon
+├── project.godot                           # Godot project configuration
+└── README.md                               # This file
 ```
 
 ## Customization
@@ -326,6 +398,46 @@ To integrate the cinematic camera into your game:
 
 Quick setup guide is provided in `CAMERA_QUICK_REFERENCE.md`.
 Complete documentation is in `CAMERA_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Lighting System
+
+To integrate the lighting system into your game:
+
+1. **Add to Scene**: Add a Node2D to your scene and attach `lighting_system.gd`
+2. **Configure in Inspector**: Enable features and adjust colors, fog, and light properties
+3. **Setup Player Light**: Call `lighting_system.setup_player_light(player)` in your code
+4. **Add Environmental Lights**: Use `add_flickering_light(position, color)` to place torches/lamps
+5. **Darken Scene**: Add a CanvasModulate with dark color (e.g., Color(0.1, 0.1, 0.15)) for best effect
+6. **Adjust at Runtime**: Use methods like `set_player_light_energy()` and `set_fog_enabled()`
+7. **Test**: Use `lighting_test.tscn` to test all lighting features
+
+Quick setup guide is provided in `ATMOSPHERIC_QUICK_REFERENCE.md`.
+Complete documentation is in `LIGHTING_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Particle Manager
+
+To integrate the particle manager into your game:
+
+1. **Add to Scene**: Add a Node2D to your scene and attach `particle_manager.gd`
+2. **Configure in Inspector**: Enable effect types and adjust colors, counts, and lifetimes
+3. **Connect to Dash**: Connect dash signals to `start_dash_trail()` and `stop_dash_trail()`
+4. **Spawn Effects**: Call `spawn_impact()`, `spawn_dust()` when needed
+5. **Create Custom Effects**: Use `add_custom_effect()` for unique particle types
+6. **Test**: Use `particle_test.tscn` to test all particle effects
+
+Quick setup guide is provided in `ATMOSPHERIC_QUICK_REFERENCE.md`.
+Complete documentation is in `PARTICLE_MANAGER_IMPLEMENTATION_SUMMARY.md`.
+
+### Using the Atmospheric Integration
+
+For automatic integration of lighting and particles:
+
+1. **Add Integration Script**: Add a Node with `atmospheric_integration.gd` to your scene
+2. **Auto-Detection**: Script will find LightingSystem, ParticleManager, and DashModule
+3. **Automatic Effects**: Landing dust and dash trails work automatically
+4. **Use Helper Methods**: Call `spawn_impact_at_player()`, `add_environmental_light()`, etc.
+
+The integration script connects all atmospheric systems with minimal setup required.
 
 ### Godot 4 Compatibility
 
