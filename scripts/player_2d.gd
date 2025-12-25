@@ -17,6 +17,25 @@ extends CharacterBody2D
 class_name Player2D
 
 # ============================================================================
+# FINITE STATE MACHINE
+# ============================================================================
+
+## State enumeration for the player
+## Defines all possible states the player can be in
+enum State {
+	IDLE,  ## Player is on the ground and not moving
+	RUN,   ## Player is on the ground and moving horizontally
+	JUMP,  ## Player is in the air and moving upward
+	FALL   ## Player is in the air and moving downward
+}
+
+## Current state of the player - exposed for debugging and external access
+var current_state: State = State.IDLE
+
+## Previous state of the player - useful for state transition logic
+var previous_state: State = State.IDLE
+
+# ============================================================================
 # MOVEMENT PARAMETERS
 # ============================================================================
 
@@ -88,7 +107,8 @@ var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
 	## Initialize the player controller
-	pass
+	## Set initial state to IDLE
+	set_state(State.IDLE)
 
 
 func _physics_process(delta: float) -> void:
@@ -111,6 +131,10 @@ func _physics_process(delta: float) -> void:
 	
 	# Update grounded state after movement
 	_update_grounded_state()
+	
+	# Update the finite state machine
+	physics_update_state()
+	update_state(delta)
 
 # ============================================================================
 # MOVEMENT METHODS
@@ -232,6 +256,94 @@ func _update_grounded_state() -> void:
 		_is_jumping = false
 
 # ============================================================================
+# FINITE STATE MACHINE METHODS
+# ============================================================================
+
+func set_state(new_state: State) -> void:
+	## Switch to a new state
+	## This method handles state transitions and maintains state history
+	## 
+	## Parameters:
+	##   new_state: The state to transition to
+	##
+	## Note: This method stores the previous state before transitioning,
+	## which can be useful for conditional logic based on state changes
+	
+	# Only update if actually changing state
+	if new_state == current_state:
+		return
+	
+	# Store the previous state for reference
+	previous_state = current_state
+	
+	# Transition to the new state
+	current_state = new_state
+	
+	# Optional: Add state entry logic here if needed in the future
+	# For example: _on_state_entered(current_state)
+
+
+func update_state(dt: float) -> void:
+	## General update logic for states
+	## This method can be extended to handle state-specific update logic
+	## that runs every frame regardless of physics calculations
+	##
+	## Parameters:
+	##   dt: Delta time in seconds
+	##
+	## Note: Currently acts as a placeholder for future state-specific
+	## logic such as animation updates, timers, or state-dependent behavior
+	
+	# State-specific update logic can be added here
+	# For now, this serves as an extension point for future enhancements
+	match current_state:
+		State.IDLE:
+			pass  # Future: Handle idle-specific updates
+		State.RUN:
+			pass  # Future: Handle run-specific updates
+		State.JUMP:
+			pass  # Future: Handle jump-specific updates
+		State.FALL:
+			pass  # Future: Handle fall-specific updates
+
+
+func physics_update_state() -> void:
+	## State-specific actions during physics processing
+	## This method determines which state the player should be in based on
+	## their current movement and position, then transitions accordingly
+	##
+	## State Determination Logic:
+	##   - JUMP: Player is moving upward (negative Y velocity)
+	##   - FALL: Player is moving downward (positive Y velocity)
+	##   - RUN: Player is on the ground and moving horizontally
+	##   - IDLE: Player is on the ground and not moving
+	##
+	## Note: States are checked in priority order to ensure correct behavior
+	
+	var new_state: State = current_state
+	
+	# Determine the appropriate state based on player movement
+	if not is_on_floor():
+		# Player is in the air
+		if velocity.y < 0:
+			# Moving upward - jumping
+			new_state = State.JUMP
+		else:
+			# Moving downward - falling
+			new_state = State.FALL
+	else:
+		# Player is on the ground
+		if abs(velocity.x) > 0.1:
+			# Moving horizontally - running
+			new_state = State.RUN
+		else:
+			# Not moving - idle
+			new_state = State.IDLE
+	
+	# Transition to the determined state
+	set_state(new_state)
+
+# ============================================================================
 # PUBLIC API METHODS
 # ============================================================================
 
@@ -253,3 +365,19 @@ func is_jumping() -> bool:
 func is_falling() -> bool:
 	## Returns true if the player is falling
 	return velocity.y > 0 and not is_on_floor()
+
+
+func get_state_name() -> String:
+	## Returns the current state as a human-readable string
+	## Useful for debugging and UI display
+	match current_state:
+		State.IDLE:
+			return "IDLE"
+		State.RUN:
+			return "RUN"
+		State.JUMP:
+			return "JUMP"
+		State.FALL:
+			return "FALL"
+		_:
+			return "UNKNOWN"

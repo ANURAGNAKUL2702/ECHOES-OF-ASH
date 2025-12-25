@@ -4,6 +4,30 @@ A Godot 4 game project featuring a production-quality 2D player movement control
 
 ## Features
 
+### Finite State Machine (FSM)
+
+The player controller now includes a clean, production-ready finite state machine with the following features:
+
+#### States
+- **IDLE**: Player is on the ground and not moving
+- **RUN**: Player is on the ground and moving horizontally  
+- **JUMP**: Player is in the air and moving upward
+- **FALL**: Player is in the air and moving downward
+
+#### State Management
+- **Type-Safe Design**: States are defined as an enum for compile-time safety
+- **Exposed Variables**: `current_state` and `previous_state` are accessible for debugging and external logic
+- **Clean API**: 
+  - `set_state(state: State)`: Switch to a new state with automatic previous state tracking
+  - `update_state(dt: float)`: Extension point for state-specific frame updates
+  - `physics_update_state()`: Automatically determines and transitions between states based on player movement
+  - `get_state_name() -> String`: Returns current state as a human-readable string
+
+#### Modularity
+- **Easy to Extend**: Add new states by extending the `State` enum and adding cases to the `match` statements
+- **Separation of Concerns**: Movement logic remains separate from state management
+- **Future-Ready**: Placeholder methods allow easy addition of state-specific behavior (animations, effects, etc.)
+
 ### Player Movement Controller
 
 The game includes a robust 2D player movement controller (`Player2D`) with the following features:
@@ -83,11 +107,12 @@ The player controller exposes many parameters that can be adjusted in the Godot 
 
 The `Player2D` controller uses Godot 4's `CharacterBody2D` class and implements:
 
-1. **Physics Integration**: Leverages Godot's built-in physics with `move_and_slide()`
-2. **Delta Time**: All movement calculations use delta time for frame-rate independence
-3. **Input System**: Uses Godot 4's action-based input system
-4. **State Management**: Tracks grounded state, timers, and jump consumption
-5. **Public API**: Provides query methods like `is_jumping()`, `is_falling()`, etc.
+1. **Finite State Machine**: Clean FSM with Idle, Run, Jump, and Fall states for organized game logic
+2. **Physics Integration**: Leverages Godot's built-in physics with `move_and_slide()`
+3. **Delta Time**: All movement calculations use delta time for frame-rate independence
+4. **Input System**: Uses Godot 4's action-based input system
+5. **State Management**: Tracks grounded state, timers, jump consumption, and FSM states
+6. **Public API**: Provides query methods like `is_jumping()`, `is_falling()`, `get_state_name()`, etc.
 
 ### Godot 4 Compatibility
 
